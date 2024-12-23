@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini API Demo</title>
+</head>
+<body>
+  <h1>Roasting nama</h1>
+  <input type="text" id="prompt" placeholder="Enter a prompt">
+  <button onclick="generateContent()">Generate</button>
+  <p id="output"></p>
+
+  <script>
+    async function generateContent() {
+      const prompt = document.getElementById("prompt").value;
+      try {
+        const response = await fetch(`/generate?prompt=${encodeURIComponent(prompt)}`);
+        const data = await response.json();
+
+        if (data.text) {
+          // Menghapus simbol-simbol ** dan menggantinya dengan elemen HTML <strong>
+          let text = data.text;
+          text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+          
+          // Menampilkan hasil dengan elemen HTML
+          document.getElementById("output").innerHTML = text;
+        } else {
+          document.getElementById("output").innerText = "No response";
+        }
+      } catch (error) {
+        console.error("Error generating content:", error);
+        document.getElementById("output").innerText = "Error generating content";
+      }
+    }
+  </script>
+</body>
+</html>
